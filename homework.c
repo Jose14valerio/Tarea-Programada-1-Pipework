@@ -35,27 +35,27 @@ void receiveInfo(){
   hidrantes = generalInfo[2];
   fugas = generalInfo[3];
 }
-bool isCompatible(char pipe, int fila, int columna, struct Pipe *pipeType, struct Location where[]){
+bool isCompatible(char pipe, int fila, int columna, struct Pipe *pipeType){
   bool returnBool = true;
   int dimensionCounter =0;
   // cannot go east
   // si no es una fuga ni hidrante
 
   if((pipe == '4' || pipe == '5'|| pipe=='6'|| pipe=='7'|| pipe=='C'|| pipe =='D'|| pipe =='E'|| pipe=='F') &&
-   (matriz[fila][columna+1] =='2'||matriz[fila][columna+1]=='4' ||  matriz[fila][columna+1]=='6'||
-   matriz[fila][columna+1]=='8'|| matriz[fila][columna+1]=='A'||matriz[fila][columna+1]=='C'||
-   matriz[fila][columna+1]=='E'||matriz[fila][columna+1]=='0'||matriz[fila][columna+1]==-1)){
- pipeType->direction = 'E';
-//printf("%c", pipeType->direction);
+  (matriz[fila][columna+1] =='2'||matriz[fila][columna+1]=='4' ||  matriz[fila][columna+1]=='6'||
+  matriz[fila][columna+1]=='8'|| matriz[fila][columna+1]=='A'||matriz[fila][columna+1]=='C'||
+  matriz[fila][columna+1]=='E'||matriz[fila][columna+1]=='0'||matriz[fila][columna+1]==-1)){
+    pipeType->direction = 'E';
+    //printf("%c", pipeType->direction);
     returnBool = false;
-    }
-//cannot go south
+  }
+  //cannot go south
   if((pipe =='2'||pipe=='3'||pipe == '6'||pipe=='7'||pipe=='A'||pipe=='B'||pipe == 'E'||pipe =='F')&&
   (matriz[fila+1][columna]=='2'||matriz[fila+1][columna]=='3'||matriz[fila+1][columna]=='4'
   ||matriz[fila+1][columna]=='5'||matriz[fila+1][columna]=='6'||matriz[fila+1][columna]=='7'
   ||matriz[fila+1][columna]=='1'||matriz[fila+1][columna]=='0'||matriz[fila+1][columna]==-1)){
     pipeType->direction ='S';
-  //  printf("%c", pipeType->direction);
+    //  printf("%c", pipeType->direction);
     returnBool = false;
   }
   //cannot go west
@@ -64,7 +64,7 @@ bool isCompatible(char pipe, int fila, int columna, struct Pipe *pipeType, struc
   ||matriz[fila][columna-1]=='8'||matriz[fila][columna-1]=='9'||matriz[fila][columna-1]=='A'
   ||matriz[fila][columna-1]=='B'||matriz[fila][columna-1]=='0'||matriz[fila][columna-1]==-1)){
     pipeType->direction ='W';
-  //  printf("%c", pipeType->direction);
+    //  printf("%c", pipeType->direction);
     returnBool = false;
   }
   //cannot go north
@@ -73,19 +73,19 @@ bool isCompatible(char pipe, int fila, int columna, struct Pipe *pipeType, struc
   ||matriz[fila-1][columna]=='8'||matriz[fila-1][columna]=='9'||matriz[fila-1][columna]=='C'
   ||matriz[fila-1][columna]=='D'||matriz[fila-1][columna]=='0'||matriz[fila-1][columna]==-1)){
     pipeType->direction ='N';
-//    printf("%c", pipeType->direction);
+    //    printf("%c", pipeType->direction);
     returnBool = false;
   }
 
   //cannot go north
   return returnBool;
-  }
+}
 void receiveDetails(struct Location where[]){
   int dimensionCounter = 0;
   while (dimensionCounter<hidrantes+fugas){
     scanf("%d %d %c",&where[dimensionCounter].row,&where[dimensionCounter].column,&where[dimensionCounter].cardinal);
     //printf("%d %d %c\n",where[dimensionCounter].row,where[dimensionCounter].column,where[dimensionCounter].cardinal);
-  dimensionCounter++;
+    dimensionCounter++;
   }
 }
 void receiveMatrix(){
@@ -94,39 +94,73 @@ void receiveMatrix(){
   for (int filaCounter=0; filaCounter<filas+2; filaCounter++){
     matriz[filaCounter] = (char*)malloc(sizeof(char)*columnas+2);
   }
-// llena el rededor con -1
-   for (int filaCounter= 0; filaCounter< filas+2; filaCounter++ ){
+  // llena el rededor con -1
+  for (int filaCounter= 0; filaCounter< filas+2; filaCounter++ ){
     for (int columnaCounter=0; columnaCounter<columnas+2; columnaCounter++){
       if(filaCounter ==0 ||columnaCounter ==0 ||filaCounter ==filas+1 || columnaCounter==columnas+1){
         matriz[filaCounter][columnaCounter] = -1;
       }
-        else{
-      scanf("%s", &matriz[filaCounter][columnaCounter]);
+      else{
+        scanf("%s", &matriz[filaCounter][columnaCounter]);
       }
     }
-    }
   }
+}
 void findLeaks(struct Pipe *pipeType, struct Location where[]){
+
   char focus;
   int dimensionCounter =0;
   // mientras haya revisado todas las fugas y hidrantes
   while (dimensionCounter<fugas+hidrantes){
     // por toda la matriz
-  for(int filaCounter =0; filaCounter<filas+2; filaCounter++){
-    for(int columnaCounter=0; columnaCounter<columnas+2; columnaCounter++){
-      // si hay una fuga y no es una salida ni hidrante
-      if(!isCompatible(matriz[filaCounter][columnaCounter], filaCounter, columnaCounter, pipeType, where)){
-        if (filaCounter == where[dimensionCounter].row && columnaCounter == where[dimensionCounter].column){dimensionCounter++;}
-        else{
+    for(int filaCounter =0; filaCounter<filas+2; filaCounter++){
+      for(int columnaCounter=0; columnaCounter<columnas+2; columnaCounter++){
+        // si hay una fuga y no es una salida ni hidrante
+        if(!isCompatible(matriz[filaCounter][columnaCounter], filaCounter, columnaCounter, pipeType)){
+          if (filaCounter == where[dimensionCounter].row && columnaCounter == where[dimensionCounter].column){dimensionCounter++;}
+          else{
             pipeType->hex = matriz[filaCounter][columnaCounter];
-            printf("%c%c %d%d ",pipeType->direction,matriz[filaCounter][columnaCounter],filaCounter,columnaCounter);
-          }
-            }
+            printf("leak %d %d %c\n",filaCounter,columnaCounter,pipeType->direction);
           }
         }
-        dimensionCounter++;
       }
     }
+    dimensionCounter++;
+  }
+
+  /*
+int filaCounter =0;
+int columnaCounter =0;
+
+while(filaCounter<filas+2){
+  while (columnaCounter<columnas+2){
+    // si hay una fuga y no es una salida ni hidrante
+    if(!isCompatible(matriz[filaCounter][columnaCounter], filaCounter, columnaCounter, pipeType)){
+      int dimensionCounter =0;
+      while (dimensionCounter<fugas+hidrantes){
+        // si no es un hidrante o salida
+        if ((filaCounter == where[dimensionCounter].row && columnaCounter == where[dimensionCounter].column)){
+          columnaCounter++;
+          dimensionCounter++;
+        }
+        else{
+          // imprima el tubo
+          pipeType->hex = matriz[filaCounter][columnaCounter];
+          printf("%c%c %d%d ",pipeType->direction,matriz[filaCounter][columnaCounter],filaCounter,columnaCounter);
+          columnaCounter++;
+        }
+
+
+      }
+
+    }
+    columnaCounter++;
+  }
+  filaCounter++;
+}
+*/
+}
+
 
 
 
@@ -155,19 +189,19 @@ int main(){
   while (dimensionCounter<hidrantes+fugas){
     //scanf("%d %d %c",&where[dimensionCounter].row,&where[dimensionCounter].column,&where[dimensionCounter].cardinal);
     printf("%d %d %c\n",where[dimensionCounter].row,where[dimensionCounter].column,where[dimensionCounter].cardinal);
-  dimensionCounter++;
+    dimensionCounter++;
   }
-    printMatrix();
+  printMatrix();
   findLeaks(&pipeType, where);
 
 
 
   //findLeaks(pipeType);
 
-for (int i =0; i<filas+2; i++){
-  free(matriz[i]);
-}
-free(matriz);
+  for (int i =0; i<filas+2; i++){
+    free(matriz[i]);
+  }
+  free(matriz);
 
-return 0;
+  return 0;
 }
