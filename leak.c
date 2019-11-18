@@ -122,7 +122,7 @@ void findLeaks(struct Pipe *pipeType){
     for(int columnaCounter=0; columnaCounter<columnas+2; columnaCounter++){
       // si hay una fuga y no es una salida ni hidrante
       if(!isLeaking(matriz[filaCounter][columnaCounter], filaCounter, columnaCounter, pipeType)){
-        printf("solved");
+//do something
       }
       //  printf("TOTAL LEAKS: %d fila: %d columna:%d\n",totalLeaks,filaCounter, columnaCounter);
 
@@ -164,33 +164,7 @@ void printLeaks(struct Pipe *leakList){
   for(int counter3 =0; counter3<totalLeaks-(entradas+salidas);counter3++){
   printf("leaks %d %d %c\n", leakList[counter3].row, leakList[counter3].column,leakList[counter3].direction);
   }
-}
-int main(){
-
-  receiveInfo();
-  // create struct to save variables
-  struct Location leakage[entradas+salidas];
-  struct Pipe pipeType[(filas*columnas)-(salidas+entradas)];
-  // llenarlo con numeros raros para ver si funciona
-  /*
-  for (int counter =0; counter<(filas*columnas)-(salidas+entradas); counter++){
-    pipeType[counter].row = -1 ;
-    pipeType[counter].column = -1 ;
-    pipeType[counter].direction = 'Q' ;
+  if (totalLeaks-(entradas+salidas) ==0){
+    printf("solved");
   }
-  */
-  receiveDetails(leakage);
-  receiveMatrix();
-  printMatrix();
-  findLeaks(pipeType);
-  struct Pipe leakList[totalLeaks-(entradas+salidas)];
-  findTrueLeaks(leakList,pipeType, leakage);
-  printLeaks(leakList);
-//free 2d array
-for (int i =0; i<filas+2; i++){
-  free(matriz[i]);
-}
-free(matriz);
-
-return 0;
 }
