@@ -51,6 +51,19 @@ bool validarArgumentos(int argc, char* argv[argc]){
                 return false;
             }
         }
+        if(findOutput(argc, &argv[argc], &output[1024]) == 3){
+            archivoTexto = true;
+            if(archivoDeSalida(&output[1024]) == false){
+                return false;
+            }
+        }else if (findOutput(argc, &argv[argc], &output[1024]) == 2){
+            return false;
+        }else if (findOutput(argc, &argv[argc], &output[1024]) == 4){
+            archivoBinario = true;
+            if(archivoDeSalida(&output[1024]) == false){
+                return false;
+            }
+        }
     }
     return true;
 }
@@ -118,6 +131,8 @@ bool archivoDeEntrada(char input[1024]){
             strcat(input, nombreArchivo);
             strcat(input, ".");
             strcat(input, extencionArchivo);
+        }else{
+            return false;
         }
     }
     return true;
@@ -137,6 +152,8 @@ bool archivoDeSalida(char output[1024]){
             strcat(input, nombreArchivo);
             strcat(input, ".");
             strcat(input, extencionArchivo);
+        }else{
+            return false;
         }
     }
     return true;
