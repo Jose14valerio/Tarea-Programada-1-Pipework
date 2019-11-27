@@ -1,31 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
+#include "verificarEntrada.h"
 
-bool lecturaTexto = true;
-bool lecturaBinaria = false;
-bool salidaTexto = true;
-bool salidaBinaria = false;
-bool leerArchivo = false;
-bool archivoTexto = false;
-bool archivoBinario = false;
-char input[1024];
-char output[1024];
-
-bool validarArgumentos(int argc, char* argv[argc]);
-int findInput(int argc, char *argv[argc], char input[1024]);
-int findOutput(int argc, char *argv[argc], char output[1024]);
-bool archivoDeEntrada(char input[1024]);
-bool archivoDeSalida(char output[1024]);
-
-int main (int argc, char* argv[]){
-    if(validarArgumentos(argc, &argv[argc]) == false){
-        printf("Argumentos invalidos, el programa se va a cerrar\n");
-        return -1;
-    }
-    return 0;
-} 
 
 bool validarArgumentos(int argc, char* argv[argc]){
     bool valido = true;

@@ -1,26 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-
-int generalInfo[4];
-int filas;
-int columnas;
-int entradas;
-int salidas;
-int totalLeaks;
-struct Location{
-  int row;
-  int column;
-  char cardinal;
-};
-struct Pipe{
-  char direction;
-  char hex;
-  int row;
-  int column;
-};
-
-char **matriz;
+#include "leak.h"
 
 void receiveInfo(){
 
