@@ -1,7 +1,8 @@
+#include "leak.c"
+#include "verificarEntrada.c"
 
-#include "solution.c"
 int main(){
-
+   
   receiveInfo();
   // create struct to save variables
   struct Location leakage[entradas+salidas];
